@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Scale, Megaphone, Send, Loader2, ChefHat } from 'lucide-react'
 
-const ANTHROPIC_KEY = (import.meta as any).env?.VITE_ANTHROPIC_KEY || ''
+
 
 const AGENTS = {
   lex: {
@@ -71,17 +71,16 @@ export default function Chat() {
     setMsgs(m => [...m, newMsg])
     setInput('')
     setLoading(true)
-    const cfg = AGENTS[agent]
     const history = [...msgs.filter(m => m.agent === agent), newMsg]
       .map(m => ({ role: m.role, content: m.content }))
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json', 'anthropic-dangerous-direct-browser-access': 'true' },
-        body: JSON.stringify({ model: 'claude-3-5-haiku-20241022', max_tokens: 1024, system: cfg.system, messages: history }),
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ agent, messages: history }),
       })
       const data = await res.json()
-      const reply = data.content?.[0]?.text || 'No response.'
+      const reply = data.text || data.error || 'No response.'
       setMsgs(m => [...m, { role: 'assistant', content: reply, agent }])
     } catch {
       setMsgs(m => [...m, { role: 'assistant', content: 'Connection error. Please try again.', agent }])
