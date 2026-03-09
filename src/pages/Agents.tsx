@@ -1,4 +1,4 @@
-import { Scale, Megaphone, CheckCircle, Zap } from 'lucide-react'
+import { Scale, Megaphone, CheckCircle, Zap, Bot, Cpu, BarChart2, Plus } from 'lucide-react'
 
 const LEX_CAPABILITIES = [
   { title: 'Liquor License Research & Renewals', desc: 'State and local liquor license requirements, renewal timelines, application preparation, and compliance monitoring for every location.' },
@@ -101,6 +101,66 @@ export default function Agents() {
         </div>
         <div className="mt-4 p-3 bg-pink-950/20 border border-pink-800/30 rounded-xl">
           <p className="text-xs text-pink-200/80 italic">Included in your plan · Rex works best when you tell him what's in the inventory and what nights need a boost.</p>
+        </div>
+      </div>
+      {/* Inactive agents */}
+      <div>
+        <p className="text-sm font-bold text-white mb-4">Additional Agents — Available to Add</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            {
+              name: 'Kit',
+              icon: Bot,
+              color: 'text-slate-400',
+              bg: 'bg-slate-700/20',
+              border: 'border-slate-600/30',
+              tagline: 'Operations & Ops Intelligence',
+              desc: 'General operations assistant. Vendor communication drafts, staff memos, partner update emails, and day-to-day ops support across all three locations.',
+            },
+            {
+              name: 'Nova',
+              icon: BarChart2,
+              color: 'text-violet-400',
+              bg: 'bg-violet-700/10',
+              border: 'border-violet-600/20',
+              tagline: 'Financial Forecasting & Analysis',
+              desc: 'Deep financial intelligence. Quarterly projections, scenario modeling, cash flow forecasting, and investor-ready reporting for your group.',
+            },
+            {
+              name: 'Atlas',
+              icon: Cpu,
+              color: 'text-cyan-400',
+              bg: 'bg-cyan-700/10',
+              border: 'border-cyan-600/20',
+              tagline: 'Research & Strategic Intelligence',
+              desc: 'Market research, competitive analysis, new location feasibility, supplier benchmarking, and industry trend reporting for ownership-level decisions.',
+            },
+          ].map(a => {
+            const Icon = a.icon
+            return (
+              <div key={a.name} className={`rounded-2xl border ${a.border} ${a.bg} p-5 opacity-70`}>
+                <div className="flex items-start gap-3 mb-3">
+                  <div className={`w-10 h-10 rounded-xl ${a.bg} border ${a.border} flex items-center justify-center shrink-0`}>
+                    <Icon className={`w-5 h-5 ${a.color}`} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <p className="text-sm font-black text-white">{a.name}</p>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-700/50 text-slate-500 border border-slate-600/30 font-bold">Inactive</span>
+                    </div>
+                    <p className="text-xs text-slate-400">{a.tagline}</p>
+                  </div>
+                </div>
+                <p className="text-xs text-slate-500 leading-relaxed mb-4">{a.desc}</p>
+                <a
+                  href={`mailto:ben@axiomstreamgroup.com?subject=Add ${a.name} to my Restaurateur MC&body=I'd like to activate ${a.name} for Chen Hospitality Group.`}
+                  className="flex items-center justify-center gap-1.5 w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-300 hover:text-white hover:border-slate-500 transition-colors"
+                >
+                  <Plus className="w-3 h-3" /> Add {a.name} — +$5/month
+                </a>
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>
