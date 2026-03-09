@@ -1,4 +1,5 @@
-import { Package, AlertTriangle, Lightbulb, TrendingDown } from 'lucide-react'
+import { Package, AlertTriangle, Lightbulb, TrendingDown, Megaphone } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 const INVENTORY = [
   // EXPIRING SOON
@@ -15,6 +16,11 @@ const INVENTORY = [
 ]
 
 export default function Inventory() {
+  const navigate = useNavigate()
+  const askRex = (item: typeof INVENTORY[0]) => {
+    const msg = `I have ${item.qty} of ${item.item} expiring ${item.expires === 'Tonight' ? 'tonight' : `on ${item.expires}`} at ${item.restaurant}. The cost at risk is $${item.cost}. Please draft a social media post (Instagram caption + story idea) to run a special around this item tonight, and suggest a price point and special name.`
+    navigate('/chat', { state: { agent: 'rex', prefill: msg } })
+  }
   const expiring = INVENTORY.filter(i => i.daysLeft <= 4)
   const adequate = INVENTORY.filter(i => i.daysLeft > 4)
   const urgentCost = expiring.reduce((s, i) => s + i.cost, 0)
@@ -67,13 +73,20 @@ export default function Inventory() {
                   </div>
                   <p className="text-xs text-slate-400 mb-2">{item.restaurant} · {item.qty} · Cost at risk: ${item.cost}</p>
                   {item.suggestion && (
-                    <div className="flex items-start gap-2">
+                    <div className="flex items-start gap-2 mb-3">
                       <div className="w-4 h-4 rounded border border-emerald-500/40 bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5">
                         <Lightbulb className="w-2.5 h-2.5 text-emerald-400" />
                       </div>
                       <p className="text-xs text-emerald-200/90"><strong>Suggested action:</strong> {item.suggestion}</p>
                     </div>
                   )}
+                  <button
+                    onClick={() => askRex(item)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-600/15 border border-pink-500/30 text-pink-300 text-xs font-semibold hover:bg-pink-600/25 hover:border-pink-400/50 hover:text-pink-200 transition-all"
+                  >
+                    <Megaphone className="w-3 h-3" />
+                    Ask Rex to draft socials
+                  </button>
                 </div>
               </div>
             </div>

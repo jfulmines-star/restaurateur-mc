@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Scale, Megaphone, Send, Loader2, ChefHat } from 'lucide-react'
 
 const ANTHROPIC_KEY = (import.meta as any).env?.VITE_ANTHROPIC_KEY || ''
@@ -50,13 +51,18 @@ type Agent = 'lex' | 'rex'
 type Msg = { role: 'user' | 'assistant'; content: string; agent: Agent }
 
 export default function Chat() {
-  const [agent, setAgent] = useState<Agent>('lex')
+  const location = useLocation()
+  const navState = location.state as { agent?: Agent; prefill?: string } | null
+
+  const [agent, setAgent] = useState<Agent>(navState?.agent || 'lex')
   const [msgs, setMsgs] = useState<Msg[]>([])
-  const [input, setInput] = useState('')
+  const [input, setInput] = useState(navState?.prefill || '')
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [msgs, loading])
+  useEffect(() => { if (navState?.prefill) { inputRef.current?.focus() } }, [])
 
   const send = async (text?: string) => {
     const content = (text || input).trim()
@@ -168,6 +174,7 @@ export default function Chat() {
       <div className="shrink-0 px-4 pb-4 pt-3 border-t border-slate-800 bg-slate-950">
         <div className="max-w-3xl mx-auto flex gap-2">
           <input
+            ref={inputRef}
             className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500"
             placeholder={`Ask ${cfg.name}…`}
             value={input}
