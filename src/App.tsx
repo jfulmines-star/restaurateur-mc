@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, CalendarClock, Package, Clock, DollarSign, CheckSquare, Users, MessageSquare, Menu, X, ChefHat } from 'lucide-react'
+import { LayoutDashboard, CalendarClock, Package, Clock, DollarSign, CheckSquare, Users, MessageSquare, Menu, X, ChefHat, TrendingUp, BarChart2 } from 'lucide-react'
 import Dashboard from './pages/Dashboard'
+import Financials from './pages/Financials'
+import MenuEngineering from './pages/MenuEngineering'
 import Deadlines from './pages/Deadlines'
 import Inventory from './pages/Inventory'
 import Timekeeper from './pages/Timekeeper'
@@ -13,10 +15,12 @@ import { DEMO_CONFIG } from './config'
 
 const NAV = [
   { to: '/dashboard',  icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/financials', icon: DollarSign,      label: 'Financials' },
+  { to: '/menu',       icon: BarChart2,       label: 'Menu Engineering' },
   { to: '/deadlines',  icon: CalendarClock,   label: 'Deadlines & Filings' },
   { to: '/inventory',  icon: Package,         label: 'Inventory' },
   { to: '/timekeeper', icon: Clock,           label: 'Timekeeper' },
-  { to: '/payroll',    icon: DollarSign,      label: 'Payroll' },
+  { to: '/payroll',    icon: TrendingUp,      label: 'Payroll' },
   { to: '/todos',      icon: CheckSquare,     label: 'To-Dos' },
   { to: '/agents',     icon: Users,           label: 'Your Agents' },
   { to: '/chat',       icon: MessageSquare,   label: '✦ Ask Lex or Rex' },
@@ -129,6 +133,8 @@ export default function App() {
             <Routes>
               <Route path="/" element={<MobileDefaultRoute />} />
               <Route path="/dashboard"  element={<Dashboard />} />
+              <Route path="/financials" element={<Financials />} />
+              <Route path="/menu"       element={<MenuEngineering />} />
               <Route path="/deadlines"  element={<Deadlines />} />
               <Route path="/inventory"  element={<Inventory />} />
               <Route path="/timekeeper" element={<Timekeeper />} />
